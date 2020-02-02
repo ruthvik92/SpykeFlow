@@ -420,6 +420,9 @@ class Network(object):
         return
 
     def lateral_inhibition(self,pots,conv_spikes,spiked_neurons,SpikesPerNeuronAllowed): 
+        '''
+        Adapted from Saeed Reza Kheradpishe and Timothee Masquelier's Matlab code
+        '''
         vbn = np.where(SpikesPerNeuronAllowed==0)
         conv_spikes[vbn[0],vbn[1],:]=0 #if a neuron in a position has spiked b4 don't let it spike 
         high_volts=np.zeros(pots.shape)
@@ -436,6 +439,9 @@ class Network(object):
 
 
     def stdp_competition(self,pots_):
+        '''
+        Adapted from Saeed Reza Kheradpishe and Timothee Masquelier's Matlab code
+        '''
         tentative_stdp_ids={}
         for i in range(self.output_channels):
             tentative_stdp_ids[str(i)]=[]
