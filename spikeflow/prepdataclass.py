@@ -83,21 +83,23 @@ class prepData(object):
 
     def prepMNIST(self):
         print('Prepping the MNIST data .... \n')
-        train_x, train_y = self.get_train_data()
-        train_x_list = map(lambda x: np.reshape(x,(28,28)),train_x)
-        train_y_list = train_y.tolist()
+        try:
+            train_x, train_y = self.get_train_data()
+            train_x_list = map(lambda x: np.reshape(x,(28,28)),train_x)
+            train_y_list = train_y.tolist()
 
-        test_x, test_y = self.get_test_data()
-        test_x_list = map(lambda x: np.reshape(x,(28,28)),test_x)
-        test_y_list = test_y.tolist()
+            test_x, test_y = self.get_test_data()
+            test_x_list = map(lambda x: np.reshape(x,(28,28)),test_x)
+            test_y_list = test_y.tolist()
 
-        train_x_list.extend(test_x_list)
-        train_y_list.extend(test_y_list)
-        nofClasses = 10
+            train_x_list.extend(test_x_list)
+            train_y_list.extend(test_y_list)
+            nofClasses = 10
 
-        self.create_images((train_x_list,train_y_list),nofClasses,dataset='mnist/')
-        print('Finished MNIST data ..\n')
-
+            self.create_images((train_x_list,train_y_list),nofClasses,dataset='mnist/')
+            print('Finished MNIST data ..\n')
+        except:
+            print('Unable to find data in AllDataSets/mnist..')
 ########################  EMNIST DATA ######################################
 
 
@@ -132,30 +134,33 @@ class prepData(object):
 
     def prepEMNIST(self):
         print('Prepping the EMNIST data .... \n')
-        training_data, validation_data, test_data = self.load_data()
-        #print(len(training_data[0]), len(validation_data[0]), len(test_data[0]))
-        #sys.exit()
-        train_x, train_y = training_data
-        train_x_list = map(lambda x: np.reshape(x,(28,28)),train_x)
-        train_y_list = train_y.tolist()
+        try:
+            training_data, validation_data, test_data = self.load_data()
+            #print(len(training_data[0]), len(validation_data[0]), len(test_data[0]))
+            #sys.exit()
+            train_x, train_y = training_data
+            train_x_list = map(lambda x: np.reshape(x,(28,28)),train_x)
+            train_y_list = train_y.tolist()
 
-        val_x, val_y = validation_data
-        val_x_list = map(lambda x: np.reshape(x,(28,28)),val_x)
-        val_y_list = val_y.tolist()
-        train_x_list.extend(val_x_list)
-        train_y_list.extend(val_y_list)
+            val_x, val_y = validation_data
+            val_x_list = map(lambda x: np.reshape(x,(28,28)),val_x)
+            val_y_list = val_y.tolist()
+            train_x_list.extend(val_x_list)
+            train_y_list.extend(val_y_list)
 
 
-        test_x, test_y = test_data
-        test_x_list = map(lambda x: np.reshape(x,(28,28)),test_x)
-        test_y_list = test_y.tolist()
-        train_x_list.extend(test_x_list)
-        train_y_list.extend(test_y_list)
+            test_x, test_y = test_data
+            test_x_list = map(lambda x: np.reshape(x,(28,28)),test_x)
+            test_y_list = test_y.tolist()
+            train_x_list.extend(test_x_list)
+            train_y_list.extend(test_y_list)
 
-        nofClasses = 47
-        self.create_images((train_x_list,train_y_list),nofClasses,dataset='emnist/')
-        print('Finished EMNIST data ..\n')
-
+            nofClasses = 47
+            self.create_images((train_x_list,train_y_list),nofClasses,dataset='emnist/')
+            print('Finished EMNIST data ..\n')
+        except:
+            print('Unable to find data in AllDataSets/emnist..')
+            
 ############################### CIFAR 10 DATA #########################################
 
     def unpickle(self,file):
@@ -166,59 +171,63 @@ class prepData(object):
 
     def prepCIFAR10(self):
         print('Prepping the CIFAR10 data .... \n')
-        path = '../AllDataSets/cifar10/'
-        data_pkl = ['data_batch_1','data_batch_2','data_batch_3','data_batch_4','data_batch_5','test_batch']
-        data = []
-        labels = []
-        batch_label = []
-        file_names = []
-        for file in data_pkl:
-            open(path+file,'rb')
-            batch = self.unpickle(path+file)
-            data.append(batch['data'])
-            labels.append(batch['labels'])
-            batch_label.append(batch['batch_label'])
-            file_names.append(batch['filenames'])
+        try:
+            path = '../AllDataSets/cifar10/'
+            data_pkl = ['data_batch_1','data_batch_2','data_batch_3','data_batch_4','data_batch_5','test_batch']
+            data = []
+            labels = []
+            batch_label = []
+            file_names = []
+            for file in data_pkl:
+                open(path+file,'rb')
+                batch = self.unpickle(path+file)
+                data.append(batch['data'])
+                labels.append(batch['labels'])
+                batch_label.append(batch['batch_label'])
+                file_names.append(batch['filenames'])
 
 
-        all_data = np.vstack(data).reshape(60000,3,32,32) #reshaping it to 60000,32,32,3 will messup the image
-        all_data = theano.shared(all_data)
-        all_data = all_data.dimshuffle(0,2,3,1)
-        train_x_list = all_data.eval()
-        train_y_list = np.hstack(labels)
+            all_data = np.vstack(data).reshape(60000,3,32,32) #reshaping it to 60000,32,32,3 will messup the image
+            all_data = theano.shared(all_data)
+            all_data = all_data.dimshuffle(0,2,3,1)
+            train_x_list = all_data.eval()
+            train_y_list = np.hstack(labels)
 
-        nofClasses = 10
-        self.create_images((train_x_list,train_y_list),nofClasses,dataset='cifar10/')
-        print('Finished CIFAR10 data ..\n')
-        
+            nofClasses = 10
+            self.create_images((train_x_list,train_y_list),nofClasses,dataset='cifar10/')
+            print('Finished CIFAR10 data ..\n')
+        except:
+            print('Unable to find data in AllDataSets/cifar10..')
 ############################### CIFAR 100 DATA #########################################
 
     def prepCIFAR100(self):
-        print('Prepping the CIFAR100 data .... \n')
-        path = '../AllDataSets/cifar100/'
-        data_pkl = ['train_data','test_data']
-        data = []
-        labels = []
-        batch_label = []
-        file_names = []
-        for file in data_pkl:
-            open(path+file,'rb')
-            batch = self.unpickle(path+file)
-            data.append(batch['data'])
-            labels.append(batch['fine_labels'])
-            batch_label.append(batch['batch_label'])
-            file_names.append(batch['filenames'])
+        try:
+            print('Prepping the CIFAR100 data .... \n')
+            path = '../AllDataSets/cifar100/'
+            data_pkl = ['train_data','test_data']
+            data = []
+            labels = []
+            batch_label = []
+            file_names = []
+            for file in data_pkl:
+                open(path+file,'rb')
+                batch = self.unpickle(path+file)
+                data.append(batch['data'])
+                labels.append(batch['fine_labels'])
+                batch_label.append(batch['batch_label'])
+                file_names.append(batch['filenames'])
 
 
 
-        all_data = np.vstack(data).reshape(60000,3,32,32) #reshaping it to 60000,32,32,3 will messup the image
-        all_data = theano.shared(all_data)
-        all_data = all_data.dimshuffle(0,2,3,1)
-        train_x_list = all_data.eval()
-        train_y_list = np.hstack(labels)
+            all_data = np.vstack(data).reshape(60000,3,32,32) #reshaping it to 60000,32,32,3 will messup the image
+            all_data = theano.shared(all_data)
+            all_data = all_data.dimshuffle(0,2,3,1)
+            train_x_list = all_data.eval()
+            train_y_list = np.hstack(labels)
 
-        nofClasses = 100
-        self.create_images((train_x_list,train_y_list),nofClasses,dataset='cifar100/')
-        print('Finished CIFAR100 data ..\n')
-
+            nofClasses = 100
+            self.create_images((train_x_list,train_y_list),nofClasses,dataset='cifar100/')
+            print('Finished CIFAR100 data ..\n')
+        except:
+            print('Unable to find data in AllDataSets/cifar100..') 
 prep = prepData(common_path = '../AllDataSets/')

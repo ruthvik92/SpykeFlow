@@ -47,7 +47,11 @@ class InputLayer(object):
         self.sigma1 = 1.0 
         self.sigma2 = 2.0
         self.dataset = dataset
-        self.categories = os.listdir(self.train_path)  #get the categories to be split
+        try:
+            self.categories = os.listdir(self.train_path)  #get the categories to be split
+        except:
+            print('File path:{} is not found'.format(self.train_path))
+            sys.exit()
         #print(self.categories)
         self.size = size
         self.on_dog_filter = self.DoG()
@@ -64,7 +68,7 @@ class InputLayer(object):
         self.on_threshold = on_threshold
     def DataSplitter(self):
         '''
-        for datasets like CALTECH101, CALTECH256 
+        for datasets like CALTECH101, CALTECH256 or any custom made datasets 
         This code expects the file system like this:
 
         train
