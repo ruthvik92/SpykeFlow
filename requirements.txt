@@ -84,7 +84,6 @@ pathlib2==2.3.3
 pbr==5.1.0
 pexpect==4.0.1
 pickleshare==0.7.5
-Pillow==3.1.2
 progressbar==2.3
 prometheus-client==0.6.0
 prompt-toolkit==1.0.16
@@ -101,7 +100,6 @@ pyserial==3.2.1
 python-dateutil==2.4.2
 pytz==2014.10
 PyWavelets==0.5.2
-PyYAML==3.13
 pyzmq==18.0.1
 qtconsole==4.4.4
 quantities==0.11.1+36.gacba339
@@ -117,7 +115,7 @@ simplegeneric==0.8.1
 singledispatch==3.4.0.3
 six==1.11.0
 subprocess32==3.5.2
-tensorboard==1.14.0
+tensorboard==1.15.0
 tensorflow-estimator==1.14.0
 tensorflow-gpu==1.14.0
 termcolor==1.1.0
@@ -132,6 +130,5 @@ urllib3==1.13.1
 virtualenv==15.0.1
 wcwidth==0.1.7
 weave==0.16.0
-Werkzeug==0.14.1
 widgetsnbextension==3.4.2
 wrapt==1.11.2
