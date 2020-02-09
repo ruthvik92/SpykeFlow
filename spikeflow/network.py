@@ -496,7 +496,8 @@ class Network(object):
         
 
     def animation(self,features, sample_interval,intervals,plotx,ploty,layer_num=[2,3,4],filter_sizes=[5,2,5],\
-                             filter_strides=[1,2,1],nof_filters=[30,30,100],types=['conv','pool','conv'],currLayer=4):
+                             filter_strides=[1,2,1],nof_filters=[30,30,100],types=['conv','pool','conv'],currLayer=4,\
+                             figsize=(10,10), font1=14, font2=20):
         if(self.train):
             if(any(isinstance(el, list) for el in features)):
                 pass
@@ -510,15 +511,15 @@ class Network(object):
         # make sure that the shape of the features is [5x5x2x30]*#samples
         #########################################################################################################
                 plot_x=plotx; plot_y=ploty
-                fig, axes = plt.subplots(plot_x,plot_y , figsize=(8.5, 10),
+                fig, axes = plt.subplots(plot_x,plot_y , figsize=figsize,
                                  subplot_kw={'xticks': [], 'yticks': []})
-                plt.subplots_adjust(left=0.12, bottom=0.0, right=0.89, top=0.9, wspace=0.1, hspace=0.21)
+                fig.subplots_adjust(left=0.12, bottom=0.0, right=0.89, top=0.9, wspace=0.1, hspace=0.21)
                 axes_list = []
                 for i, sub in enumerate(axes.flatten()):
                     X = np.zeros((self.conv_kernel_size,self.conv_kernel_size,3))
                     X[:,:,0]=features[0][:,:,1,i]
                     X[:,:,1]=features[0][:,:,0,i]
-                    sub.set_title('Map'+str(i+1),fontsize=15)
+                    sub.set_title('Map'+str(i+1),fontsize=font1)
                     axes_list.append(sub.imshow(X,interpolation='none'))
 
         #set up the skeleton
@@ -535,8 +536,7 @@ class Network(object):
         #########################################################################################################################
 
                 ani=animation.FuncAnimation(fig, run, frames=range(1,len(features)),blit=True)
-                plt.suptitle('Final filters of L2',fontsize=24)
-                plt.show()
+                #plt.show()
             else:
                 first_layers_features =[[[items[0][-1]]] for items in features[0:len(features)-1]]
                 final_features = []
@@ -551,14 +551,14 @@ class Network(object):
                 #print(len(final_features),[items.shape for items in final_features])
                 
                 plot_x=plotx; plot_y=ploty
-                fig, axes = plt.subplots(plot_x,plot_y , figsize=(8.5, 10),
+                fig, axes = plt.subplots(plot_x,plot_y , figsize=figsize,
                                  subplot_kw={'xticks': [], 'yticks': []})
-                plt.subplots_adjust(left=0.03, bottom=0.0, right=0.99, top=0.9, wspace=0.27, hspace=0.21)
+                fig.subplots_adjust(left=0.03, bottom=0.0, right=0.99, top=0.9, wspace=0.27, hspace=0.21)
                 axes_list = []
                 self.feature_visualization(features,sample_interval,intervals,plotx,ploty,\
                                             layer_num,filter_sizes,filter_strides,nof_filters, types,currLayer,show=False)
                 for i, sub in enumerate(axes.flatten()):
-                    sub.set_title('Map'+str(i+1),fontsize=15)
+                    sub.set_title('Map'+str(i+1),fontsize=font1)
                     axes_list.append(sub.imshow(self.final_features[:,:,:,i],interpolation='none'))
                     ###TODO: Fix this
                 
@@ -569,18 +569,19 @@ class Network(object):
 
                 ani=animation.FuncAnimation(fig, run, frames=range(len(features[-1][0])),repeat=not False,blit=True)
                 #ani=animation.FuncAnimation(fig, run, frames=len(features[-1])-1,repeat=False)
-                plt.suptitle('Final filters of Layer:{}'.format(currLayer),fontsize=24)
-                plt.show()
+                #plt.show()
 
+            plt.suptitle('Final filters of Layer:{}'.format(currLayer),fontsize=font2)
+            return ani, fig
         else:
             print('THIS METHOD IS USED WHEN train in __init__ IS SET TO True') 
             
 
-        return
 
 
     def feature_visualization(self, features, sample_interval,intervals,plotx=6,ploty=5,layer_num=[2,3,4],filter_sizes=[5,2,5],\
-                             filter_strides=[1,2,1],nof_filters=[30,30,100],types=['conv','pool','conv'],currLayer=4,show=True):
+                             filter_strides=[1,2,1],nof_filters=[30,30,100],types=['conv','pool','conv'],currLayer=4,\
+                             show=True, figsize=(10,10), font1=12, font2=18):
         if(self.train):
             if(any(isinstance(el, list) for el in features)):
                 pass
@@ -592,9 +593,9 @@ class Network(object):
             if(len(features)==1): ## feature visualization for the first layer
                 features = features[0]
                 self.final_features = features
-                fig, axes = plt.subplots(len(features), self.output_channels,figsize=(30, 4),
+                fig, axes = plt.subplots(len(features), self.output_channels,figsize=figsize,
                              subplot_kw={'xticks': [], 'yticks': []})
-                fig.subplots_adjust(left=0.12,bottom=0.04,right=0.89,top=1.0,hspace=0.42, wspace=0.08)
+                #fig.subplots_adjust(left=0.12,bottom=0.04,right=0.89,top=1.0,hspace=0.42, wspace=0.08)
                 for i, row in enumerate(axes):
                     for j, cell in enumerate(row):
                         x = features[i][:,:,0,j]
@@ -606,16 +607,16 @@ class Network(object):
                         X[:,:,1]=x
                         cell.imshow(X,interpolation='none')
                         if i == len(axes) - 1:
-                            cell.set_xlabel("Map: {0:d}".format(j + 1),rotation='vertical',fontsize=21.5)
+                            cell.set_xlabel("Map: {0:d}".format(j + 1),rotation='vertical',fontsize=font1)
                         if j == 0:
-                            cell.set_ylabel("{0:d}         ".format(samples[i]),rotation=0,fontsize=21.5)
+                            cell.set_ylabel("{0:d}         ".format(samples[i]),rotation=0,fontsize=font1)
 
-                plt.suptitle('Evolved Filters for {} Images and A_plus=0.004,A_minus=0.003'.\
-                             format(len(features)*sample_interval),fontsize=30)
+                #plt.suptitle('Evolved Filters for {} Images and A_plus=0.004,A_minus=0.003'.\
+                #             format(len(features)*sample_interval),fontsize=30)
                 fig.text(0.04, 0.5, 'Evolved filters for every'+' '+str(sample_interval)+' '+'images',\
-                 va='center', rotation='vertical',fontsize=30)
+                 va='center', rotation='vertical',fontsize=font2)
                 #plt.tight_layout()
-                plt.show()
+                #plt.show()
             else:
                 feature_sizes=[]
                 layer_weights = [items[0][-1] for items in features]
@@ -677,21 +678,21 @@ class Network(object):
 
                 self.final_features = final_features
                 if(show):
-                    fig, axes = plt.subplots(plotx, ploty,figsize=(30, 4),
+                    fig, axes = plt.subplots(plotx, ploty,figsize=figsize,
                                  subplot_kw={'xticks': [], 'yticks': []})
                     fig.subplots_adjust(left=0.03, bottom=0.0, right=0.99, top=0.9, wspace=0.27, hspace=0.21)      
                     axes = axes.flat
                     for i in range(len(axes)):
                         axes[i].imshow(final_features[:,:,:,i],interpolation='none')
                         axes[i].set_title('Map'+str(i+1),fontsize=16)
-                    plt.show()
+                    #plt.show()
                 
+                    return fig
         else:
             print('THIS METHOD IS USED WHEN train in __init__ == True and save_pool_spike_tensor==True') 
-        return 
 
 
-    def feature_convergence(self, features, sample_interval):
+    def feature_convergence(self, features, sample_interval, font_size=38):
         if(self.train):
             keys = ['Conv'+str(i+1) for i in range(len(features))]
             convergences = [[] for items in features]
@@ -763,7 +764,7 @@ class Network(object):
 
 
     def spikes_per_map_per_class(self,plot_x,plot_y,class_labels,pool_output_data,labels_map,labelsize, view_maps,\
-    final_weights):
+    final_weights, figsize=(16,8)):
         '''
         offset: since spikes per map per label for all feature maps can't be plotted because of space issues,
                 we selectively plot for some feature maps
@@ -775,7 +776,7 @@ class Network(object):
         if(not self.train and self.save_pool_spike_tensor):
             rows = plot_y
             cols = plot_x
-            fig, axes = plt.subplots(rows, cols,figsize=(16, 8))
+            fig, axes = plt.subplots(rows, cols,figsize=figsize)
             fig.subplots_adjust(hspace=0.20, wspace=0.07,top=0.94, right=1.00, bottom=0.11, left=0.03)
             ax = axes.flat
             a_sum = 0
@@ -813,15 +814,16 @@ class Network(object):
                 x[:,:,0]=final_weights[:,:,0,view_maps[i]-1] 
                 x[:,:,1]=final_weights[:,:,1,view_maps[i]-1]
                 small_axes.imshow(x,interpolation='None')
-                print(sum(spikes_per_digit.values()))
-                print(spikes_per_digit.values())
+                #print(sum(spikes_per_digit.values()))
+                #print(spikes_per_digit.values())
 
             matplotlib.rcParams.update({'font.size': font_size})
             #plt.suptitle('Spike profile of {} feature maps that are selective to {} different classes'.\
             #             format(str(pool_output_data.shape[2]),str(max(class_labels)+1)))
-            plt.show()
-            print('TOTAL NUMBER OF SPIKES IN POOL1 TIME TENSOR IN GRAPH:{}'.format(a_sum))
+            #plt.show()
+            print('TOTAL NUMBER OF SPIKES IN POOL1 TIME TENSOR IN PLOTS:{}'.format(a_sum))
             print('TOTAL NUMBER OF SPIKES IN POOL1 TIME TENSOR:{}'.format(pool_output_data.sum()))
+            return fig
         else:
             print('THIS METHOD IS USED WHEN train in __init__ IS SET TO False') 
 
