@@ -1,5 +1,4 @@
 absl-py==0.8.1
-adium-theme-ubuntu==0.3.4
 adjustText==0.6.1
 astor==0.7.1
 attrs==19.1.0
