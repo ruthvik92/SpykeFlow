@@ -688,6 +688,7 @@ class Network(object):
                     #plt.show()
                 
                     return fig
+            return fig
         else:
             print('THIS METHOD IS USED WHEN train in __init__ == True and save_pool_spike_tensor==True') 
 
@@ -708,7 +709,7 @@ class Network(object):
             df = pd.DataFrame.from_dict(convdict,orient='index')
             df = df.transpose()
             df.plot(style='.-',title='Plot of weight convergence')
-            plt.ylabel('$\\frac{Weights*(1-Weights)}{No.\\ Of\\ Weights}$',fontsize=font_size)
+            plt.ylabel('$\\frac{\\Sigma(Weights*(1-Weights))}{No.\\ Of\\ Weights}$',fontsize=font_size)
             #df.plot(style='.-',title='Plot of weight convergence',logy= True)
             #plt.ylabel('$\\log(\\frac{Weights*(1-Weights)}{No.\\ Of\\ Weights})$')
             plt.xlabel('Sample Number, S.I='+str(sample_interval)+' Images')
@@ -717,7 +718,7 @@ class Network(object):
             df = pd.DataFrame.from_dict(diffdict,orient='index')
             df = df.transpose()
             df.plot(style='.-',title='Plot of normalized temporal difference of weights')
-            plt.ylabel('$\\frac{Sum(Weights[t-1]-Weights[t])^{2}}{No.\\ Of\\ Weights}$',fontsize=font_size)
+            plt.ylabel('$\\frac{\\Sigma(Weights[t-1]-Weights[t])^{2}}{No.\\ Of\\ Weights}$',fontsize=font_size)
             plt.xlabel('Sample Number, S.I='+str(sample_interval)+' Images')
             plt.show()
         else:
@@ -726,7 +727,7 @@ class Network(object):
         return
 
 
-    def spike_statistics(self):
+    def spike_statistics(self, font_size=38):
         if(self.train):           
             plt.bar(range(1,len(self.updates_per_map)+1),self.updates_per_map)
             plt.xlabel('Maps',fontsize=font_size)
@@ -746,17 +747,18 @@ class Network(object):
             ax.set_xlim(0,len(temporal_spikes))
             ax.set_ylim(0,max(temporal_spikes)+3)
             spikes_ms = np.mean(temporal_spikes).round(decimals=3)
-            ax.text(2000,4.5,'Mean='+str(spikes_ms)+" spikes/image",fontsize=28,bbox=dict(facecolor='none', edgecolor='blue',pad=2))
+            ax.text(2000,4.5,'Mean='+str(spikes_ms)+" spikes/image",fontsize=font_size,bbox=dict(facecolor='none', edgecolor='blue',pad=2))
             sub_axis = inset_axes(ax,width='25%',height=2.5,loc=1)
-            x1,x2,y1,y2=1000,1020,0,spikes_ms+2
+            x1,x2,y1,y2=1000,1200,0,spikes_ms+2
             #print(len(temporal_spikes))
             sub_axis.scatter(range(x1,x2),temporal_spikes[x1:x2], marker='*',s=6)
-            sub_axis.tick_params(labelsize=15)
+            sub_axis.tick_params(labelsize=font_size/2)
             sub_axis.set_xlim(x1,x2)
             sub_axis.set_ylim(y1,y2)
             sub_axis.ticklabel_format(scilimits=(0,0),axis='x')
             mark_inset(ax,sub_axis,loc1=2,loc2=4,fc='none',ec='0.5')
             plt.show()
+            return fig
 
         else:
             print('THIS METHOD IS USED WHEN train in __init__ IS SET TO True') 
