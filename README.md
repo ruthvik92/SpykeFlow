@@ -1,5 +1,5 @@
 # SpykeFlow 
-##Introduction
+## Introduction
 * This is a tool for unsupervised feature extraction with spiking neural networks.
 * Neurons are non-leaky integrate and fire. There are methods to enforce lateral inhibition, STDP competition.
 * It provides insights like spike activity, feature extraction, animation of synapse evoltuion for each layer etc. 
