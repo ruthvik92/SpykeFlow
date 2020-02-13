@@ -6,9 +6,9 @@
 * It also provides feature classification class and a few other jupyter notebooks with misc codes.
 ## Organization
 * `AllDataSets` folder should contain the data that you wish to work with.
-* `spikeflow` folder contains all the important classes of **SpikeFlow**.
+* `spykeflow` folder contains all the important classes of **SpykeFlow**.
 * `notebooks` contains miscelleneous jupyter notebooks for classification, plots, etc.
-* `outputs` contains all the outputs/plots generated so far with **SpikeFlow**.
+* `outputs` contains all the outputs/plots generated so far with **SpykeFlow**.
 * `notebooks/main_emnist.ipynb` shows an example to train a spiking convolutional layer with two conv and pool layers
 with **EMNIST** dataset and effects of lateral inhibition on spike activity and feature extraction inside the network.
 * `notebooks/main_facebike.ipynb` shows an example to train a spiking convolutional layer with three conv and pool layers
