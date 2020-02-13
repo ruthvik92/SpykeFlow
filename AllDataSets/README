@@ -1,0 +1,50 @@
+Datasets like CALTECH101, CALTECH256 or any custom made datasets 
+        This prepdataclass.py expects the file system like this:
+dataset_name
+        train
+            /category1
+            /category2
+            /category3
+            .
+            .
+            .
+        test
+            (empty folder)
+        valid
+            (empty folder)
+
+        categories will be split according to the specified
+        fractions and files will be organuzed like this:
+        
+        train
+            /category1
+            /category2
+            /category3
+            .
+            .
+            .
+        test
+            /category1
+            /category2
+            /category3
+        valid
+            /category1
+            /category2
+            /category3
+
+        '''
+
+Other datasets like MNIST, EMNIST, CIFAR10, CIFAR100 can be placed like blow
+
+MNIST/
+    xxxxxxx.pkl.gz file
+
+EMNIST/
+    xxxxxxx.pkl.gz file
+CIFAR10/
+    xxxxxxx.pkl.gz file
+CIFAR100/
+    xxxxxxx.pkl.gz file
+
+prepdataclass.py will split the dataset and place data into train, test, valid folders with subfolder's name indicating
+a class label
