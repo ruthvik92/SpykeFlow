@@ -1,7 +1,7 @@
 import os
 os.environ["CUDA_VISIBLE_DEVICES"]="-1"  ### GPU is not used
-import inputlayerclass as inputlayer
-import Network as network
+from spykeflow import network as network
+from spykeflow import inputlayerclass as inputlayer
 import time
 import numpy as np
 import random

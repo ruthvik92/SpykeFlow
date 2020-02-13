@@ -2,6 +2,8 @@ import os
 os.environ['CUDA_VISIBLE_DEVICES']='-1'  ### GPU is not used
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH']='True'
 import inputlayerclass as inputlayer
+from spykeflow import network as network
+from spykeflow import inputlayerclass as inputlayer
 import Network as network
 import time
 import numpy as np
