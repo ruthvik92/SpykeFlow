@@ -595,7 +595,7 @@ class Network(object):
                 self.final_features = features
                 fig, axes = plt.subplots(len(features), self.output_channels,figsize=figsize,
                              subplot_kw={'xticks': [], 'yticks': []})
-                #fig.subplots_adjust(left=0.12,bottom=0.04,right=0.89,top=1.0,hspace=0.42, wspace=0.08)
+                #fig.subplots_adjust(left=0.1,bottom=0.11,right=0.98,top=0.94,hspace=0.33, wspace=0.07)
                 for i, row in enumerate(axes):
                     for j, cell in enumerate(row):
                         x = features[i][:,:,0,j]
@@ -613,8 +613,8 @@ class Network(object):
 
                 #plt.suptitle('Evolved Filters for {} Images and A_plus=0.004,A_minus=0.003'.\
                 #             format(len(features)*sample_interval),fontsize=30)
-                fig.text(0.04, 0.5, 'Evolved filters for every'+' '+str(sample_interval)+' '+'images',\
-                 va='center', rotation='vertical',fontsize=font2)
+                #fig.text(0.04, 0.5, 'Evolved filters for every'+' '+str(sample_interval)+' '+'images',\
+                # va='center', rotation='vertical',fontsize=font2)
                 #plt.tight_layout()
                 #plt.show()
             else:
@@ -688,7 +688,8 @@ class Network(object):
                     #plt.show()
                 
                     return fig
-            return fig
+            if(show):
+                return fig
         else:
             print('THIS METHOD IS USED WHEN train in __init__ == True and save_pool_spike_tensor==True') 
 
@@ -765,8 +766,8 @@ class Network(object):
 
 
 
-    def spikes_per_map_per_class(self,plot_x,plot_y,class_labels,pool_output_data,labels_map,labelsize, view_maps,\
-    final_weights, figsize=(16,8)):
+    def spikes_per_map_per_class(self,plot_x,plot_y,class_labels,pool_output_data,labels_map, view_maps,\
+    final_weights, font_size=40, inset_tick_size=15, figsize=(16,8), tick_size=20):
         '''
         offset: since spikes per map per label for all feature maps can't be plotted because of space issues,
                 we selectively plot for some feature maps
@@ -774,6 +775,9 @@ class Network(object):
         pool_output_data: spike tensor collected at a pooling layer
         final_weights: final evolved weights
         view_maps: Map numbers to be examined
+        tick_size: size of ticks on subplots
+        inset_tick_size: size of ticks on insets
+        font_size: size of fonts on each of the sub plot headings
         '''
         if(not self.train and self.save_pool_spike_tensor):
             rows = plot_y
@@ -802,12 +806,12 @@ class Network(object):
                 #reds.sort()
                 select_index.append(spikes_per_digit.values())
                 ax[i].set_title('Map'+str(view_maps[i])+' ,'+''+'Dominant classes:'+str([spikes_per_digit.keys()[red] \
-                for red in reds]),fontsize=font_size/2)
+                for red in reds]),fontsize=font_size)
                 #ax[i].set_ylim(0,2*(spikes_per_digit[labels_map[reds[-1]]]))
                 ax[i].tick_params(labelrotation=45)
-                ax[i].tick_params(axis='both', which='major', labelsize=labelsize)
+                ax[i].tick_params(axis='both', which='major', labelsize=tick_size)
                 small_axes = inset_axes(ax[i],width="20%",height="20%",loc=1)
-                small_axes.tick_params(axis='both', which='major', labelsize=8)
+                small_axes.tick_params(axis='both', which='major', labelsize=inset_tick_size)
                 if(type(final_weights) == None):
                     print('use this method after using feature_visualization method!')
                 x = np.zeros((final_weights.shape[0],final_weights.shape[1],3))
@@ -819,7 +823,7 @@ class Network(object):
                 #print(sum(spikes_per_digit.values()))
                 #print(spikes_per_digit.values())
 
-            matplotlib.rcParams.update({'font.size': font_size})
+            #matplotlib.rcParams.update({'font.size': font_size})
             #plt.suptitle('Spike profile of {} feature maps that are selective to {} different classes'.\
             #             format(str(pool_output_data.shape[2]),str(max(class_labels)+1)))
             #plt.show()

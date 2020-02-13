@@ -1,9 +1,10 @@
-# Introduction
+# SpykeFlow 
+##Introduction
 * This is a tool for unsupervised feature extraction with spiking neural networks.
 * Neurons are non-leaky integrate and fire. There are methods to enforce lateral inhibition, STDP competition.
 * It provides insights like spike activity, feature extraction, animation of synapse evoltuion for each layer etc. 
 * It also provides feature classification class and a few other jupyter notebooks with misc codes.
-# Organization
+## Organization
 * `AllDataSets` folder should contain the data that you wish to work with.
 * `spikeflow` folder contains all the important classes of **SpikeFlow**.
 * `notebooks` contains miscelleneous jupyter notebooks for classification, plots, etc.
