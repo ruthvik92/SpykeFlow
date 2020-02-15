@@ -12,7 +12,16 @@ from keras.utils import np_utils
 import matplotlib
 import matplotlib.animation as animation
 np.random.seed(0)
-
+plt.style.use('ggplot')
+mpl.rcParams['figure.figsize'] = 10,10
+mpl.rcParams['axes.titlesize'] = 24
+mpl.rcParams['axes.labelsize'] = 52
+mpl.rcParams['lines.linewidth'] = 4
+mpl.rcParams['lines.markersize'] = 8
+mpl.rcParams['xtick.labelsize'] = 38
+mpl.rcParams['ytick.labelsize'] = 38
+mpl.rcParams['legend.fontsize'] = 48
+mpl.rcParams['font.size'] = 48
 
 ############### PREPARE THE SPIKE DATA ################## dataset can be mnist, emnist, cifar100,cifar10, caltech101, caltech256
 T1 = time.time()
