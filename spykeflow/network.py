@@ -587,6 +587,8 @@ class Network(object):
                 pass
             else:
                 print('Exiting!! features, should be a list of list')
+                ## needs a list of list because each mini list contains the features of conv layers
+                ## sampled at regular intervals.
                 sys.exit()
 
             samples = [0+sample_interval*i for i in range(0,intervals+1)]  
@@ -595,7 +597,7 @@ class Network(object):
                 self.final_features = features
                 fig, axes = plt.subplots(len(features), self.output_channels,figsize=figsize,
                              subplot_kw={'xticks': [], 'yticks': []})
-                #fig.subplots_adjust(left=0.1,bottom=0.11,right=0.98,top=0.94,hspace=0.33, wspace=0.07)
+                #fig.subplots_adjust(left=0.05,bottom=0.17,right=0.96,top=0.88,wspace=0.17, hspace=0.20)
                 for i, row in enumerate(axes):
                     for j, cell in enumerate(row):
                         x = features[i][:,:,0,j]
@@ -680,11 +682,11 @@ class Network(object):
                 if(show):
                     fig, axes = plt.subplots(plotx, ploty,figsize=figsize,
                                  subplot_kw={'xticks': [], 'yticks': []})
-                    fig.subplots_adjust(left=0.03, bottom=0.0, right=0.99, top=0.9, wspace=0.27, hspace=0.21)      
+                    #fig.subplots_adjust(left=0.03, bottom=0.0, right=0.99, top=0.9, wspace=0.27, hspace=0.21)      
                     axes = axes.flat
                     for i in range(len(axes)):
                         axes[i].imshow(final_features[:,:,:,i],interpolation='none')
-                        axes[i].set_title('Map'+str(i+1),fontsize=16)
+                        axes[i].set_title('Map'+str(i+1),fontsize=font1)
                     #plt.show()
                 
                     return fig
@@ -783,7 +785,7 @@ class Network(object):
             rows = plot_y
             cols = plot_x
             fig, axes = plt.subplots(rows, cols,figsize=figsize)
-            fig.subplots_adjust(hspace=0.20, wspace=0.07,top=0.94, right=1.00, bottom=0.11, left=0.03)
+            #fig.subplots_adjust(hspace=0.39, wspace=0.07,top=0.93, right=0.99, bottom=0.08, left=0.08)
             ax = axes.flat
             a_sum = 0
             select_index=[]
