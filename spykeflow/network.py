@@ -715,14 +715,14 @@ class Network(object):
             plt.ylabel('$\\frac{\\Sigma(Weights*(1-Weights))}{No.\\ Of\\ Weights}$',fontsize=font_size)
             #df.plot(style='.-',title='Plot of weight convergence',logy= True)
             #plt.ylabel('$\\log(\\frac{Weights*(1-Weights)}{No.\\ Of\\ Weights})$')
-            plt.xlabel('Sample Number, S.I='+str(sample_interval)+' Images')
+            plt.xlabel('Sample Number, S.I='+str(sample_interval)+' Images', fontsize=font_size)
             plt.show()
 
             df = pd.DataFrame.from_dict(diffdict,orient='index')
             df = df.transpose()
-            df.plot(style='.-',title='Plot of normalized temporal difference of weights')
+            df.plot(style='.-',title='Plot of normalized temporal difference of weights', fontsize=font_size+3)
             plt.ylabel('$\\frac{\\Sigma(Weights[t-1]-Weights[t])^{2}}{No.\\ Of\\ Weights}$',fontsize=font_size)
-            plt.xlabel('Sample Number, S.I='+str(sample_interval)+' Images')
+            plt.xlabel('Sample Number, S.I='+str(sample_interval)+' Images', font_size=font_size)
             plt.show()
         else:
             print('THIS METHOD IS USED WHEN train in __init__ IS SET TO True') 
@@ -730,7 +730,7 @@ class Network(object):
         return
 
 
-    def spike_statistics(self, font_size=38,x1=1000,x2=1020):
+    def spike_statistics(self, font_size=38,x1=1000,x2=1020, text_box_xloc=1000):
         if(self.train):           
             plt.bar(range(1,len(self.updates_per_map)+1),self.updates_per_map)
             plt.xlabel('Maps',fontsize=font_size)
@@ -750,7 +750,7 @@ class Network(object):
             ax.set_xlim(0,len(temporal_spikes))
             ax.set_ylim(0,max(temporal_spikes)+3)
             spikes_ms = np.mean(temporal_spikes).round(decimals=3)
-            ax.text(2000,4.5,'Mean='+str(spikes_ms)+" spikes/image",fontsize=font_size,bbox=dict(facecolor='none', edgecolor='blue',pad=2))
+            ax.text(text_box_xloc,spike_ms,'Mean='+str(spikes_ms)+" spikes/image",fontsize=font_size,bbox=dict(facecolor='none', edgecolor='blue',pad=2))
             sub_axis = inset_axes(ax,width='25%',height=2.5,loc=1)
             x1,x2,y1,y2=x1,x2,0,spikes_ms+2
             #print(len(temporal_spikes))
@@ -769,7 +769,7 @@ class Network(object):
 
 
     def spikes_per_map_per_class(self,plot_x,plot_y,class_labels,pool_output_data,labels_map, view_maps,\
-    final_weights, font_size=40, inset_tick_size=15, figsize=(16,8), tick_size=20):
+    final_weights, font_size=40, inset_tick_size=15, figsize=(16,8), tick_size=20, n_dominant_classes=5):
         '''
         offset: since spikes per map per label for all feature maps can't be plotted because of space issues,
                 we selectively plot for some feature maps
@@ -802,7 +802,8 @@ class Network(object):
                 for dig in range(max(class_labels)+1):
                     a_sum+=spikes_per_digit[labels_map[dig]]
                 bars = ax[i].bar(range(len(spikes_per_digit)), spikes_per_digit.values(),tick_label=spikes_per_digit.keys())
-                reds = sorted(range(len(spikes_per_digit.values())), key=lambda po: spikes_per_digit.values()[po])[-5:]
+                reds = sorted(range(len(spikes_per_digit.values())), key=lambda po: spikes_per_digit.values()[po])\
+                [-n_dominant_classes:]
                 for red in reds:
                     bars[red].set_color('k')
                 #reds.sort()
