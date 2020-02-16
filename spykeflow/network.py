@@ -730,7 +730,7 @@ class Network(object):
         return
 
 
-    def spike_statistics(self, font_size=38):
+    def spike_statistics(self, font_size=38,x1=1000,x2=1020):
         if(self.train):           
             plt.bar(range(1,len(self.updates_per_map)+1),self.updates_per_map)
             plt.xlabel('Maps',fontsize=font_size)
@@ -752,16 +752,16 @@ class Network(object):
             spikes_ms = np.mean(temporal_spikes).round(decimals=3)
             ax.text(2000,4.5,'Mean='+str(spikes_ms)+" spikes/image",fontsize=font_size,bbox=dict(facecolor='none', edgecolor='blue',pad=2))
             sub_axis = inset_axes(ax,width='25%',height=2.5,loc=1)
-            x1,x2,y1,y2=1000,1200,0,spikes_ms+2
+            x1,x2,y1,y2=x1,x2,0,spikes_ms+2
             #print(len(temporal_spikes))
             sub_axis.scatter(range(x1,x2),temporal_spikes[x1:x2], marker='*',s=6)
-            sub_axis.tick_params(labelsize=font_size/2)
+            sub_axis.tick_params(labelsize=font_size-3)
             sub_axis.set_xlim(x1,x2)
             sub_axis.set_ylim(y1,y2)
             sub_axis.ticklabel_format(scilimits=(0,0),axis='x')
             mark_inset(ax,sub_axis,loc1=2,loc2=4,fc='none',ec='0.5')
             plt.show()
-            return fig
+            return fig, ax
 
         else:
             print('THIS METHOD IS USED WHEN train in __init__ IS SET TO True') 
