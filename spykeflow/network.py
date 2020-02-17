@@ -730,7 +730,7 @@ class Network(object):
         return
 
 
-    def spike_statistics(self, font_size=38,x1=1000,x2=1020, text_box_xloc=1000):
+    def spike_statistics(self, font_size=38,x1=1000,x2=1020, text_box_xloc=1000, marker_size=4, inset_marker_size=3):
         if(self.train):           
             plt.bar(range(1,len(self.updates_per_map)+1),self.updates_per_map)
             plt.xlabel('Maps',fontsize=font_size)
@@ -744,17 +744,17 @@ class Network(object):
             fig, ax = plt.subplots()
             temporal_spikes = self.stdp_spikes
             temporal_spikes=np.add.reduceat(temporal_spikes,range(0,self.epochs*self.sim_time,self.tsteps))
-            ax.scatter(range(len(temporal_spikes)),temporal_spikes,marker='*',s=6)
+            ax.scatter(range(len(temporal_spikes)),temporal_spikes,marker='*',s=marker_size)
             ax.set_xlabel('#Image',fontsize=font_size)
             ax.set_ylabel('No.Of STDP Spikes',fontsize=font_size)
             ax.set_xlim(0,len(temporal_spikes))
             ax.set_ylim(0,max(temporal_spikes)+3)
             spikes_ms = np.mean(temporal_spikes).round(decimals=3)
-            ax.text(text_box_xloc,spike_ms,'Mean='+str(spikes_ms)+" spikes/image",fontsize=font_size,bbox=dict(facecolor='none', edgecolor='blue',pad=2))
+            ax.text(text_box_xloc,spikes_ms,'Mean='+str(spikes_ms)+" spikes/image",fontsize=font_size,bbox=dict(facecolor='none', edgecolor='blue',pad=2))
             sub_axis = inset_axes(ax,width='25%',height=2.5,loc=1)
             x1,x2,y1,y2=x1,x2,0,spikes_ms+2
             #print(len(temporal_spikes))
-            sub_axis.scatter(range(x1,x2),temporal_spikes[x1:x2], marker='*',s=6)
+            sub_axis.scatter(range(x1,x2),temporal_spikes[x1:x2], marker='*',s=inset_marker_size)
             sub_axis.tick_params(labelsize=font_size-3)
             sub_axis.set_xlim(x1,x2)
             sub_axis.set_ylim(y1,y2)
