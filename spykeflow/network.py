@@ -722,7 +722,7 @@ class Network(object):
             df = df.transpose()
             df.plot(style='.-',title='Plot of normalized temporal difference of weights', fontsize=font_size+3)
             plt.ylabel('$\\frac{\\Sigma(Weights[t-1]-Weights[t])^{2}}{No.\\ Of\\ Weights}$',fontsize=font_size)
-            plt.xlabel('Sample Number, S.I='+str(sample_interval)+' Images', font_size=font_size)
+            plt.xlabel('Sample Number, S.I='+str(sample_interval)+' Images', fontsize=font_size)
             plt.show()
         else:
             print('THIS METHOD IS USED WHEN train in __init__ IS SET TO True') 
