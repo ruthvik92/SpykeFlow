@@ -48,12 +48,13 @@ class InputLayer(object):
         self.sigma2 = 2.0
         self.dataset = dataset
         try:
-            self.categories = os.listdir(self.train_path)  #get the categories to be split
+            self.sub_folders = os.listdir(self.train_path)  #get the categories to be split
         except:
             print('File path:{} is not found'.format(self.train_path))
             sys.exit()
         #print(self.categories)
         self.size = size
+        self.categories = None
         self.on_dog_filter = self.DoG()
         self.dogNorm = 17
         self.avg_filter = np.ones((self.dogNorm,self.dogNorm))
@@ -103,7 +104,7 @@ class InputLayer(object):
             /category3
 
         '''
-        for cat in self.categories:
+        for cat in self.sub_folders:
             image_files_path = os.path.join(self.train_path,cat)
             image_files = os.listdir(image_files_path)
             cat_val_path = os.path.join(self.val_path,cat)
@@ -123,7 +124,7 @@ class InputLayer(object):
 
             lb = preprocessing.LabelBinarizer()
             
-        return lb.fit(self.categories)
+        return lb.fit(self.sub_folders)
     
     def DoG(self):
         x=np.arange(1,int(self.window_size)+1,dtype=np.float64)
@@ -230,6 +231,7 @@ class InputLayer(object):
         
     def EncodedData(self):
         label_creator = self.DataSplitter()
+        self.categories = label_creator.classes_.tolist()
         path = os.path.join(self.path,self.data)
         final_data = []
         
