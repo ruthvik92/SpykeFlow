@@ -864,16 +864,16 @@ class Network(object):
 
 
     def faster_max_feature_vecs(self,step_nofImages, nof_conv_layers = 2):
-    '''
+        '''
         This is a video convolution method with tensorflow. Convolution results at all timesteps
         can be calculated in parallel and then sum reduced parallely for each of the image. This
         way features can be extracted in a faster way when compared to doing a for loop for every
         T timesteps per each image.
         step_nofImages: Number of images that need to be passed through the network and calculate
-                        a feature vector for each in a parallel fashion. Make sure that this number
-                        is in accordance with your GPU RAM/ CPU RAM limits or else you might start 
-                        to swap.
-    '''
+        a feature vector for each in a parallel fashion. Make sure that this number
+        is in accordance with your GPU RAM/ CPU RAM limits or else you might start 
+        to swap.
+        '''
         if(nof_conv_layers > 1): 
             #TODO: add a try catch to prevent a large step_nofImages from swapping. 
             ############# setup the input spikes(previous pool layer) and kernels
