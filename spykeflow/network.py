@@ -28,7 +28,9 @@ matplotlib.rcParams.update({'font.size': font_size})
 class Network(object):
     """ \n This class has methods for convolution and pooling and it can handle turning lateral inhibition ON or OFF and
         it also provides methods for feature visualization and spike statstics. debug feature let's you visualize the
-        spike activity in convolution and pooling layers under the influence of stdp competition and lateral inhibiiton.
+        spike activity in convolution and pooling layers under the influence of stdp competition and lateral inhibiiton
+        . Only valid mode convolution and pooling are supported.
+        #TODO: support valid and same modes, add levels of debug
     """
 
     def __init__(self,inputs=None,A_plus=0.004,conv_kernel_size=5,pool_kernel_size=2,\
