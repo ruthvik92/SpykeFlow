@@ -35,9 +35,12 @@ class Network(object):
                  threshold=15.0,conv_lateral_inh=True,pool_lateral_inh= False,STDP_compet=True, size=27, input_channels = 2,\
                  output_channels = 30, tsteps = 12,homeostasis_const=5,factor=4.0,homeo_supp_coeff=0.003,inh_reg=11,debug= False, train=True,\
                  sample_interval = 500, lr_inc_rate = 1000, set_weights=None, save_pool_features=True,\
-                 save_pool_spike_tensor=False, epochs=1,pool_spike_accum=True, few_spikes=True, weight_sigma=0.01):
+                 save_pool_spike_tensor=False, epochs=1,pool_spike_accum=True, few_spikes=True, weight_sigma=0.01,\
+                 conv_padding='VALID', pool_padding='VALID'):
         
         self.epochs = epochs
+        self.conv_padding = conv_padding
+        self.pool_padding = pool_padding
         self.conv_kernel_size = conv_kernel_size
         self.pool_kernel_size = pool_kernel_size
         self.save_pool_features = save_pool_features
@@ -57,14 +60,14 @@ class Network(object):
                                                                     self.input_channels,self.output_channels])
         self.conv_strides_1d = [1, 1, 1, 1]
         self.inter = tf.squeeze(tf.nn.conv2d(self.image_placeholder, self.kernel_placeholder, strides=self.conv_strides_1d, \
-                                             padding='VALID'))
+                                             padding=self.conv_padding))
         
         ##############Setting up pooling graph
         self.pool_image_placeholder = tf.placeholder(tfdtype,shape=[1,self.output_size,self.output_size,self.output_channels])
         self.pool_strides = [1, self.pool_kernel_size, self.pool_kernel_size,1]
         self.pool_size    = [1, self.pool_kernel_size, self.pool_kernel_size,1]
         self.inter_pooling = tf.squeeze(tf.nn.max_pool(self.pool_image_placeholder, ksize =self.pool_size,strides=self.pool_strides,\
-                                            padding='VALID',data_format= 'NHWC'))
+                                            padding=self.pool_padding,data_format= 'NHWC'))
         self.init_op = tf.global_variables_initializer()
         sess.run(self.init_op)
         ################################# end of pooling and convolution graph settings
@@ -655,7 +658,7 @@ class Network(object):
                                     for jjj in range(pool_features[:,:,:,axis_].shape[1]):
                                         mxv=pool_features[iii,jjj,:,axis_].max()
                                         mxi=pool_features[iii,jjj,:,axis_].argmax()
-                                        if(mxv>0.1):
+                                        if(mxv>0.3):
                                             strd=filter_strides[index_-1]
                                             szs=filter_sizes[index_-1]
                                             final_features[(iii-1)*strd+1:(iii)*strd+szs,\
@@ -771,8 +774,6 @@ class Network(object):
     def spikes_per_map_per_class(self,plot_x,plot_y,class_labels,pool_output_data,labels_map, view_maps,\
     final_weights, font_size=40, inset_tick_size=15, figsize=(16,8), tick_size=20, n_dominant_classes=5):
         '''
-        offset: since spikes per map per label for all feature maps can't be plotted because of space issues,
-                we selectively plot for some feature maps
         labels_map: A dictionary of label_number:label 
         pool_output_data: spike tensor collected at a pooling layer
         final_weights: final evolved weights
@@ -795,8 +796,7 @@ class Network(object):
                     spikes_per_digit[labels_map[dig]]=0
 
                 for t in range(pool_output_data.shape[-1]):
-                    #print(class_labels[t])
-                    spikes_per_digit[labels_map[int(class_labels[t/self.tsteps])]]+=pool_output_data[:,:,view_maps[i]-1,\
+                    spikes_per_digit[labels_map[class_labels[int(t/self.tsteps)]]]+=pool_output_data[:,:,view_maps[i]-1,\
                     t].sum()
 
                 for dig in range(max(class_labels)+1):

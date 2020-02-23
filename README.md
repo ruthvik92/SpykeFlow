@@ -17,7 +17,7 @@ with **facebikes** dataset and effects of lateral inhibition on spike activity a
 * `NumPy==1.15.3`, `SciPy==1.1.0`, `Progressbar==2.3`, `Theano==0.8.0`, `Pandas==u'0.20.3`, `Pickle==$Revision:72223$`,
 `Matplotlib==2.2.3`, `Keras==2.2.4`, `Sklearn==0.19.1`, `OpenCv==3.3.0`, `Tensorflow==1.14.0`.
 * Unfortunately, the code is in `Python2.7`. I will work on porting it to `Python3.7` soon. I started working on this
-tool from the Summer 2018 and Python 2.7 was still in the game for many packages that I was experimenting with and I
+tool from Summer 2018 and Python 2.7 was still in the game for many packages that I was experimenting with and I
 chose to dance with the same girl that I came with.
 # Publications
 * 
