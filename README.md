@@ -20,6 +20,5 @@ with **facebikes** dataset and effects of lateral inhibition on spike activity a
 tool from Summer 2018 and Python 2.7 was still in the game for many packages that I was experimenting with and I
 chose to dance with the same girl that I came with.
 # Publications
-* [A Deep Unsupervised Feature Learning Spiking Neural Network with Binarized Classification Layers for EMNIST
-* Classification](https://arxiv.org/abs/2002.11843) 
+* [A Deep Unsupervised Feature Learning Spiking Neural Network with Binarized Classification Layers for EMNIST Classification](https://arxiv.org/abs/2002.11843) 
 
