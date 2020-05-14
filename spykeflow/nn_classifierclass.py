@@ -76,7 +76,7 @@ class LearningRateMonitor(Callback):
         lrate = float(backend.get_value(self.model.optimizer.lr))
         self.lrates.append(lrate)
 
-backend.clear_session()
+#backend.clear_session()
 
 class Classifier(object):
 
@@ -257,14 +257,20 @@ class Classifier(object):
                 self.get_plots([self.history['acc'],self.history['val_acc']],
                 [self.history['loss'],self.history['val_loss']],lrm.lrates)
         
+        self.model.compile(loss=self.loss_function, optimizer = self.optimizer, metrics=['accuracy'])
+        print('Testing model at the end')
+        last_test_acc = self.model.evaluate(self.test_x, self.test_y, verbose=self.verbose)
+        print("%s: %.2f%%" % (self.model.metrics_names[1], last_test_acc[1]*100))
+        self.history['last_test_acc'] = last_test_acc
         # load best weights
         self.model.load_weights("weights.best.hdf5")
         # Compile model (required to make predictions)
         ##**self.model.compile(loss=self.loss_function, optimizer=self.optimizer, metrics=['accuracy'])
         self.model.compile(loss=self.loss_function, optimizer = self.optimizer, metrics=['accuracy'])
         print('Testing the best model')
-        scores = self.model.evaluate(self.test_x, self.test_y, verbose=self.verbose)
-        print("%s: %.2f%%" % (self.model.metrics_names[1], scores[1]*100))
+        best_test_acc = self.model.evaluate(self.test_x, self.test_y, verbose=self.verbose)
+        print("%s: %.2f%%" % (self.model.metrics_names[1], best_test_acc[1]*100))
+        self.history['best_test_acc'] = best_test_acc
 
     
 
