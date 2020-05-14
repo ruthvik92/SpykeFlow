@@ -5,7 +5,7 @@ from itertools import izip as zip
 import matplotlib.pyplot as plt
 import matplotlib
 import progressbar
-import sys,os
+import sys,os, random
 import tensorflow as tf
 import pickle
 import cv2
@@ -38,7 +38,7 @@ class Network(object):
                  output_channels = 30, tsteps = 12,homeostasis_const=5,factor=4.0,homeo_supp_coeff=0.003,inh_reg=11,debug= False, train=True,\
                  sample_interval = 500, lr_inc_rate = 1000, set_weights=None, save_pool_features=True,\
                  save_pool_spike_tensor=False, epochs=1,pool_spike_accum=True, few_spikes=True, weight_sigma=0.01,\
-                 conv_padding='VALID', pool_padding='VALID'):
+                 conv_padding='VALID', pool_padding='VALID', alpha=0):
         
         self.epochs = epochs
         self.conv_padding = conv_padding
@@ -48,6 +48,9 @@ class Network(object):
         self.save_pool_features = save_pool_features
         self.save_pool_spike_tensor = save_pool_spike_tensor
         self.threshold = threshold
+        self.alpha = alpha
+        self.lower_thresh = self.threshold*(1-self.alpha)
+        self.upper_thresh = self.threshold*(1+self.alpha)
         self.conv_lateral_inh = conv_lateral_inh
         self.pool_lateral_inh = pool_lateral_inh
         self.STDP_compet = STDP_compet
@@ -266,6 +269,7 @@ class Network(object):
                     self.updates_per_map_imgs = [0]*self.output_channels
                     
                 if(t%self.tsteps==0):
+                    self.threshold = random.uniform(self.lower_thresh, self.upper_thresh)
                     nofImages+=1
                     #print(nofImages)
                     if(self.debug):
@@ -344,6 +348,7 @@ class Network(object):
                 ##self.pots+=self.scipy_convolution(self.input[:,:,0,t],Weights[:,:,0,:])
                 ##self.pots+=self.scipy_convolution(self.input[:,:,1,t],Weights[:,:,1,:])
                 self.spiked_neurons= np.where(self.pots>=self.threshold)
+                #print(self.threshold)
                 self.conv_spikes[self.spiked_neurons[0],self.spiked_neurons[1],self.spiked_neurons[2]]=1
                 spikes_pre_inh+=self.conv_spikes
                 

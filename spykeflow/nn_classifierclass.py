@@ -1,5 +1,5 @@
 '''
-classifierclass.py
+nn_classifierclass.py
 '''
 import keras
 from keras.models import Sequential
