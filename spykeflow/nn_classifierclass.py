@@ -45,17 +45,17 @@ class spkNeuron(Activation):
     https://github.com/keras-team/keras/issues/8716
     '''
     def __init__(self, activation, **kwargs):
-        super(Swish, self).__init__(activation, **kwargs)
+        super(spkNeuron, self).__init__(activation, **kwargs)
         self.__name__ = 'spkNeuron'
 
-def spkNeuron(x, theta=0):
+def spk_neuron(x, theta=0):
     
     if(x>theta):
         return 1
     else:
         return 0
 
-get_custom_objects().update({'spkNeuron':spkNeuron(spkNeuron)})
+get_custom_objects().update({'spkNeuron':spkNeuron(spk_neuron)})
 #np.random.seed(0)
 ##os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 
@@ -315,13 +315,13 @@ class Classifier(object):
 
         training_inputs = [np.reshape(x, (self.network_structure[0], 1)) for x in train_x[int(len(train_x)*self.val_frac):]]
         training_results = [self.vectorized_result(y) for y in train_y[int(len(train_x)*self.val_frac):]]
-        training_data = zip(training_inputs, training_results)
+        training_data = list(zip(training_inputs, training_results))
 
         validation_inputs = [np.reshape(x, (self.network_structure[0], 1)) for x in train_x[0:int(len(train_x)*self.val_frac)]]
-        validation_data = zip(validation_inputs, train_y[0:int(len(train_x)*self.val_frac)])
+        validation_data = list(zip(validation_inputs, train_y[0:int(len(train_x)*self.val_frac)]))
 
         test_inputs = [np.reshape(x, (self.network_structure[0], 1)) for x in test_x]
-        test_data = zip(test_inputs, test_y)
+        test_data = list(zip(test_inputs, test_y))
         
         ### build the network    
         self.numpy_net = numpy_fcn.Network(self.network_structure, cost=numpy_fcn.softmax) #QuadraticCost, CrossEntropyCost,softmax
@@ -355,6 +355,7 @@ class Classifier(object):
         e = np.zeros((self.network_structure[-1], 1))
         e[j] = 1.0
         return e
+
 
 
 
