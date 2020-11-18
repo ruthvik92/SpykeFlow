@@ -72,7 +72,7 @@ neo==0.5.1
 networkx==1.11
 NEURON==7.4
 nose-testconfig==0.10
-notebook==5.7.8
+notebook==6.1.5
 numpy==1.15.3
 opencv-python==3.3.0.10
 pandas==0.20.3
