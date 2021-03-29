@@ -88,7 +88,7 @@ protobuf==3.8.0
 ptyprocess==0.5
 py-cpuinfo==3.2.0
 pyasn1==0.1.9
-Pygments==2.4.0
+Pygments==2.7.4
 pygobject==3.20.0
 PyNN==0.9.2
 pyparsing==2.4.2
